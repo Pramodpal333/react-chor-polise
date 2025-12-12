@@ -57,6 +57,7 @@ function App() {
     if (mode === 'easy') {
       roles = ['Raja', 'Rani', 'Minister', 'Chorrr'];
     } else {
+      // both medium and hard use all 6 roles
       roles = INITIAL_ROLES;
     }
     
@@ -80,8 +81,9 @@ function App() {
     setMessage("Shuffling...");
     
     let shuffleCount = 0;
-    const maxShuffles = gameMode === 'medium' ? 8 : 6;
-    const intervalTime = gameMode === 'medium' ? 250 : 500;
+    // Hard mode: faster and more shuffles
+    const maxShuffles = gameMode === 'hard' ? 12 : (gameMode === 'medium' ? 8 : 6);
+    const intervalTime = gameMode === 'hard' ? 150 : (gameMode === 'medium' ? 250 : 500);
 
     const intervalId = setInterval(() => {
         setCards(prev => {
@@ -161,22 +163,29 @@ function App() {
           CHOR POLICE
         </h1>
         
-        <div className="glass-panel" style={{ padding: '3rem', width: '100%', maxWidth: '500px' }}>
+        <div className="glass-panel" style={{ padding: '3rem', width: '100%', maxWidth: '600px' }}>
           <h2 style={{ marginBottom: '2rem' }}>Select Difficulty</h2>
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '3rem' }}>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '3rem', flexWrap: 'wrap' }}>
             <button 
               onClick={() => startGame('easy')}
-              style={{ flex: 1, padding: '1.5rem', fontSize: '1.2rem', background: '#4caf50', color: 'white' }}
+              style={{ flex: 1, padding: '1.5rem', fontSize: '1.2rem', background: '#4caf50', color: 'white', minWidth: '140px' }}
             >
               Easy
               <div style={{ fontSize: '0.8rem', marginTop: '0.5rem', opacity: 0.8 }}>4 Cards</div>
             </button>
             <button 
               onClick={() => startGame('medium')}
-              style={{ flex: 1, padding: '1.5rem', fontSize: '1.2rem', background: '#ff9800', color: 'white' }}
+              style={{ flex: 1, padding: '1.5rem', fontSize: '1.2rem', background: '#ff9800', color: 'white', minWidth: '140px' }}
             >
               Medium
               <div style={{ fontSize: '0.8rem', marginTop: '0.5rem', opacity: 0.8 }}>6 Cards</div>
+            </button>
+            <button 
+              onClick={() => startGame('hard')}
+              style={{ flex: 1, padding: '1.5rem', fontSize: '1.2rem', background: '#f44336', color: 'white', minWidth: '140px' }}
+            >
+              Hard
+              <div style={{ fontSize: '0.8rem', marginTop: '0.5rem', opacity: 0.8 }}>Fast Shuffle</div>
             </button>
           </div>
           
