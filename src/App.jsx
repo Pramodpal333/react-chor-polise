@@ -26,6 +26,21 @@ function App() {
   const [revealedCards, setRevealedCards] = useState(new Set()); 
   const [message, setMessage] = useState("Find the Chorrr!");
   const [messageType, setMessageType] = useState('info'); 
+  const [timer, setTimer] = useState(30);
+
+  useEffect(() => {
+    let interval;
+    if (gameState === 'playing' && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (timer === 0 && gameState === 'playing') {
+       setMessage("Time's Up!");
+       setMessageType('error');
+       endGame(score);
+    }
+    return () => clearInterval(interval);
+  }, [gameState, timer, score]);
 
   const startGame = (mode) => {
     setGameMode(mode);
@@ -50,6 +65,7 @@ function App() {
     setCards(newCards);
     setGameState('initial');
     setScore(0);
+    setTimer(30);
     setRevealedCards(new Set());
     setMessage("Find the Chorrr!");
     setMessageType('info');
@@ -116,7 +132,9 @@ function App() {
 
   const endGame = (finalScore) => {
     setGameState('gameOver');
-    setMessage("All suspects identified!");
+    if (timer > 0) {
+        setMessage("All suspects identified!");
+    }
     confetti({
       particleCount: 100,
       spread: 70,
@@ -165,6 +183,7 @@ function App() {
               <li>Wait for the cards to <strong>Shuffle</strong>.</li>
               <li><strong>Identify</strong> each hidden card correctly to score.</li>
               <li><strong>One Chance</strong> per card!</li>
+              <li><strong>30 Seconds</strong> to finish the mission!</li>
             </ul>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.9rem' }}>
@@ -202,6 +221,10 @@ function App() {
             <div style={{fontWeight: 'bold', color: messageType === 'error' ? '#ff5252' : messageType === 'success' ? '#4caf50' : 'white'}}>
               {message}
             </div>
+          </div>
+          <div style={{textAlign: 'center', color: timer < 10 ? '#ff5252' : 'white'}}>
+             <div style={{fontSize: '0.9em', color: '#aaa'}}>TIME</div>
+             <div style={{fontSize: '1.5em', fontWeight: 'bold'}}>{timer}s</div>
           </div>
           <div style={{textAlign: 'right'}}>
              <div style={{fontSize: '0.9em', color: '#aaa'}}>SCORE</div>
@@ -279,7 +302,7 @@ function App() {
               <div style={{ fontSize: '1.2rem', color: '#aaa', textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '2px' }}>
                 {gameMode} MODE COMPLETE
               </div>
-              <h2>Mission Accomplished!</h2>
+              <h2>{timer === 0 ? "Game Over!" : "Mission Accomplished!"}</h2>
               <p style={{fontSize: '1.5rem', margin: '1rem 0'}}>Final Score: {score}</p>
               <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem' }}>
                 <button onClick={goHome} style={{ background: 'transparent', border: '1px solid #444', color: 'white' }}>
