@@ -76,7 +76,9 @@ function App() {
     setMessage("Shuffling...");
     
     let shuffleCount = 0;
-    const maxShuffles = 6;
+    const maxShuffles = gameMode === 'medium' ? 8 : 6;
+    const intervalTime = gameMode === 'medium' ? 250 : 500;
+
     const intervalId = setInterval(() => {
         setCards(prev => {
             const shuffled = [...prev].sort(() => Math.random() - 0.5);
@@ -90,7 +92,7 @@ function App() {
             setMessage("Identify the suspects!");
             setMessageType('info');
         }
-    }, 500);
+    }, intervalTime);
   };
 
   const handleCardClick = (card) => {
