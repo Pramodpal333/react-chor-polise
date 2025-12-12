@@ -1,0 +1,103 @@
+.card {
+  position: relative;
+  width: 160px; /* Slightly wider */
+  height: 220px; /* Slightly taller */
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4);
+}
+
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+.cardFace {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Critical for overflow prevention */
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.cardFront {
+  /* Premium Glass Gradient */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: rotateY(180deg);
+  box-shadow: inset 0 0 20px rgba(255,255,255,0.05);
+}
+
+.cardBack {
+  background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #a0aec0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.cardImageContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.roleImage {
+  max-width: 100%;
+  max-height: 140px; /* Constrain height */
+  object-fit: contain;
+  filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
+  transition: transform 0.3s ease;
+}
+
+.cardFront:hover .roleImage {
+  transform: scale(1.1);
+}
+
+.roleName {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  margin-top: auto;
+  padding-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .card {
+    width: 130px;
+    height: 180px;
+  }
+  .roleImage {
+    max-height: 100px;
+  }
+  .roleName {
+    font-size: 0.9rem;
+  }
+}
