@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Card from './components/Card';
+import useSecurity from './hooks/useSecurity';
 import RoleSelector from './components/RoleSelector';
 import { Trophy, RefreshCw, Siren } from 'lucide-react';
 import confetti from 'canvas-confetti';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 
 const POINTS = {
@@ -17,6 +19,7 @@ const POINTS = {
 const INITIAL_ROLES = ['Raja', 'Rani', 'Minister', 'Sainik', 'Naagarik', 'Chorrr'];
 
 function App() {
+  useSecurity();
   const [appState, setAppState] = useState('landing'); // landing, game
   const [gameMode, setGameMode] = useState('medium'); // easy, medium
   const [gameState, setGameState] = useState('initial'); // initial, shuffling, playing, gameOver
@@ -37,9 +40,10 @@ function App() {
     } else if (timer === 0 && gameState === 'playing') {
        setMessage("Time's Up!");
        setMessageType('error');
-       endGame(score);
+       endGame();
     }
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState, timer, score]);
 
   const startGame = (mode) => {
@@ -106,7 +110,7 @@ function App() {
     if (selectedCardId === null) return;
 
     const card = cards.find(c => c.id === selectedCardId);
-    let pointsAdded = 0;
+    // let pointsAdded = 0;
 
     setRevealedCards(prev => {
       const newSet = new Set(prev);
@@ -117,7 +121,7 @@ function App() {
     if (card.role === guessedRole) {
       const points = POINTS[guessedRole];
       setScore(prev => prev + points);
-      pointsAdded = points;
+      // pointsAdded = points;
       setMessage(`Correct! It was the ${guessedRole}. +${points} pts`);
       setMessageType('success');
     } else {
@@ -126,13 +130,13 @@ function App() {
     }
     
     if (revealedCards.size + 1 === cards.length) {
-      endGame(score + pointsAdded);
+      endGame();
     }
     
     setSelectedCardId(null);
   };
 
-  const endGame = (finalScore) => {
+  const endGame = () => {
     setGameState('gameOver');
     if (timer > 0) {
         setMessage("All suspects identified!");
